@@ -70,7 +70,7 @@ Class PortableSPK implements IteratorAggregate
 	public	$public_base = null;
 	/* }}} */
 
-	/* {{{ function __construct($path = './')						- use relative SPK folder offset
+	/* {{{ function __construct($path = './')	- use relative SPK folder offset
 	 * @param	string	$path	optional relative path to SPK files
 	 * @return	object		self
 	 */
@@ -86,7 +86,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function set($config,$value = null)						- set configuration value(s)
+	/* {{{ function set($config,$value = null)	- set configuration value(s)
 	 *
 	 * @param	mixed	$config	(string) field or (array) field=>value
 	 * @param	mixed	$value	optional value if $config is string
@@ -109,7 +109,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function debugLog($text)									- collect/output debug messages
+	/* {{{ function debugLog($text)			- collect/output debug messages
 	 * @param	string	$text	message (maybe HTML formatted)
 	 * @void
 	 */
@@ -121,7 +121,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function getIterator()									- implements IteratorAggregate
+	/* {{{ function getIterator()			- implements IteratorAggregate
 	 * @return	object		ArrayIterator($this->_packages)
 	 */
 	public function getIterator() {
@@ -130,7 +130,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function __toString()									- synology package response
+	/* {{{ function __toString()			- synology package response
 	 * @return	string		JSON getPackages response
 	 */
 	public function __toString() {
@@ -154,7 +154,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function get()											- fetch PHP array of packages (json-named contents)
+	/* {{{ function get()				- fetch PHP array of packages (json-named contents)
 	 * @return	array		filename=>package description (ouput indices)
 	 */
 	public function get() {
@@ -169,7 +169,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function deDuplicate($in = false)						- find newer versions in case of conflict
+	/* {{{ function deDuplicate($in = false)	- find newer versions in case of conflict
 	 * @param	array	$in	optional _packages array
 	 * @return	array		filename=>package description (ouput indices) - current versions only
 	 */
@@ -195,9 +195,10 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function tarInfo($file, $gzip = false)					- extract INFO from .spk
+	/* {{{ function tarInfo($file, $gzip = false)	- extract INFO from .spk
 	 * @param	string	$file	package filename
 	 * @param	bool	$gzip	package is gzipped (default = retry)
+	 * @return	mixed		(array) tarinfo, (bool) false on error
 	 */
 	private function tarInfo($file, $gzip = false) {
 		if(!$f = $gzip ? gzopen($file,'r') : fopen($file,'r')) {
@@ -236,7 +237,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function addFile($file)									- add spk package
+	/* {{{ function addFile($file)			- add spk package
 	 * extract INFO and map names for JSON outout
 	 *
 	 * @param	string	$file	local filename
@@ -325,7 +326,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function addSnapshot()									- search for /pkg_img/packageid_0.jpg [0..3]
+	/* {{{ function addSnapshot()		- search for /pkg_img/packageid_0.jpg [0..3]
 	 * @return	array		snapshot paths / empty
 	 */
 	private function addSnapshot($path,$file,$spkid) {
@@ -337,7 +338,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function addFolder($path) 								- search folder for packages && add
+	/* {{{ function addFolder($path) 	- search folder for packages && add
 	 * regenerate_cache - grab all information from packages
 	 *
 	 * @param	string	$path		optional relative path
@@ -368,7 +369,7 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function stack(PortableSPK $spk)							- merge instances
+	/* {{{ function stack(PortableSPK $spk)		- merge instances
 	 * @param	mixed	$spk	object or array or objects
 	 * @return	object		self
 	 */
