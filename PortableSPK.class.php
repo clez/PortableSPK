@@ -16,9 +16,9 @@
  * @link       http://spk.unzureichende.info/
  * @see        https://github.com/clez/PortableSPK
  * @since      2013-03-06
- *
- * vim:fdm=marker:nowrap:ts=4 
  */
+// vim:fdm=marker:nowrap:ts=4 
+
 Class PortableSPK implements IteratorAggregate 
 {
 	/* {{{ member vars, public config store */
