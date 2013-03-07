@@ -12,7 +12,7 @@
  * @package    common
  * @author     <passeriform@gmail.com>
  * @license    http://php.net/license/	PHP License
- * @version    2013-03-06 / $Id$
+ * @version    2013-03-07 / $Id$
  * @link       http://spk.unzureichende.info/
  * @see        https://github.com/clez/PortableSPK
  * @since      2013-03-06
@@ -87,14 +87,16 @@ Class PortableSPK implements IteratorAggregate
 	}
 	/* }}} */
 
-	/* {{{ function set($config,$value = null)	- set configuration value(s)
+	/* {{{ function set($config,$value = null)	- set configuration value(s) or _packages
 	 *
 	 * @param	mixed	$config	(string) field or (array) field=>value
 	 * @param	mixed	$value	optional value if $config is string
 	 * @return	object		self
 	 */
 	public function set($config,$value = null) {
-		if(is_array($config)) {
+		if($config == 'packages' && is_array($value)) {
+			$this->_packages = $value;
+		} elseif(is_array($config)) {
 			foreach($config as $name=>$value) {
 				$this->$name = $value;
 			}
