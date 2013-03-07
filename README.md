@@ -1,5 +1,5 @@
-PortableSPK
-===========
+Portable SPK Source
+===================
 
 Synology SPK repository PHP class
 
