@@ -349,7 +349,7 @@ Class PortableSPK implements IteratorAggregate
 	 * @param	string	$path		optional relative path
 	 * @return	array	$packages
 	 */
-	function addFolder($path = false) {
+	private function addFolder($path = false) {
 		$path = !$path ? $this->path : $path;
 		if($dh=opendir($path)) {
 			while (($file = readdir($dh)) !== false) {
