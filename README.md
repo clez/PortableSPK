@@ -1,8 +1,7 @@
 Portable SPK Source
 ===================
 
-Synology SPK repository PHP class
-
+PHP class for Synology 3rd party package repositories
 See examples for a quick start.
 
 Features:
