@@ -1,8 +1,11 @@
 PortableSPK
 ===========
 
-Portable SPK
+Script to generate a Synology SPK repository.
 
+See examples for a quick start.
+
+Features:
 - Synology Package source
     - autoconfiguration by INFO parsing and mapping (= no administration)
     - language aware: returns dname_<lng> and description_<lng> from INFO if available, default="enu"
@@ -20,9 +23,9 @@ Portable SPK
     - iterable (foreach() packages)
     - JSON __toString()
                 -
-- Environment
-    - Apache2/PHP5
-    - No Database
-    - No external executables
-    - No package administration, drop in spk packages, SPK index monitors its folder's mtime
-      and updates automatically
+Environment:
+- Apache2/PHP5
+- No Database
+- No external executables
+- No package administration, drop in spk packages, SPK index monitors its folder's mtime
+  and updates automatically
