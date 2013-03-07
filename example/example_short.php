@@ -13,6 +13,7 @@
 require('../PortableSPK.class.php');
 $PortableSPK = new PortableSPK('./');
 //$PortableSPK->set('debug',false);
+//$PortableSPK->set('public_name','My Packages');
 //$PortableSPK->stack(new PortableSPK('./another/'));
 
 /**
@@ -25,13 +26,13 @@ if(isset($_REQUEST['arch'],$_REQUEST['build']) ) {
 /**
  * website for browsers
  */
-echo "<html><head><title>".htmlspecialchars($PortableSPK->public_name)."</title></head>";
-echo "<body><h1>".htmlspecialchars($PortableSPK->public_name)."</h1>";
+echo '<html><head><title>'.htmlspecialchars($PortableSPK->public_name).'</title></head>';
+echo '<body><h1>'.htmlspecialchars($PortableSPK->public_name).'</h1>';
 foreach($PortableSPK as $file=>$package) {	// Package Iterator
-	echo "<img style=\"float:left\" src=\"data:image/png;base64,{$package['icon']}\"/>";
-	echo "<a href=\"{$package['link']}\">{$package['dname']}</a> {$package['version']}<br/>";
-	echo implode(' ',$package['arch']).'<br/>'.$package['md5'];
-	echo '<hr style="clear:both"/>';
+	printf('<img style="float:left" src="data:image/png;base64,%s/>
+	<a href="%s">%s</a> %s<br/>%s<br/>%s<hr style="clear:both"/>',
+	$package['icon'], $package['link'],$package['dname'],$package['version'],
+	implode(' ',$package['arch']),$package['md5']);
 }
 echo '</body></html>';
 
