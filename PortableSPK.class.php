@@ -216,7 +216,7 @@ Class PortableSPK implements IteratorAggregate
 				break;
 			}
 			$s = octdec($h['size']);
-			$pad = $s > 0 ? ($s-$s%$s)+$bs : 0;
+			$pad = $s > 0 ? ($s-$s % $bs ) + $bs : 0;
 			$return['list'][$h['name']] = $s;
 			if($h['name'] == 'INFO') {
 				$return['INFO'] = substr(fread($f,$pad),0,$s);
