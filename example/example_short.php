@@ -33,6 +33,7 @@ foreach($PortableSPK as $file=>$package) {	// Package Iterator
 	<a href="%s">%s</a> %s<br/>%s<br/>%s<hr style="clear:both"/>',
 	$package['icon'], $package['link'],$package['dname'],$package['version'],
 	implode(' ',$package['arch']),$package['md5']);
+//	var_dump($package);
 }
 echo '</body></html>';
 
