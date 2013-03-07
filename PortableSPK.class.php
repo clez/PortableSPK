@@ -75,7 +75,8 @@ Class PortableSPK implements IteratorAggregate
 	 * @return	object		self
 	 */
 	public function __construct($path = './') {
-		$this->public_url = 'http://'.$_SERVER['HTTP_HOST'].($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT']:'')
+		$this->public_url = 'http://'.$_SERVER['HTTP_HOST']
+				.($_SERVER['SERVER_PORT'] != 80 ? ':'.$_SERVER['SERVER_PORT']:'')
 				.str_replace('index.php','',strtolower($_SERVER['PHP_SELF']));
 		preg_match('%^(https?\://.*/)[^/]*$%i',$this->public_url,$m);
 		$this->public_base = $m[1];
@@ -139,12 +140,13 @@ Class PortableSPK implements IteratorAggregate
 		if(isset($_REQUEST['arch'])) {
 			$arch = strtolower($_REQUEST['arch']);
 			$build = isset($_REQUEST['build']) ? (int) $_REQUEST['build'] : INF;
+			$l = $this->language;
 			foreach($this->_packages as $i=>$p) {
-				if( (in_array($arch, $p['arch']) || $p['arch'][0] == 'noarch')		// arch
-					&& $p['firmware'] <= $build					// firmware min version
+				if( (in_array($arch, $p['arch']) || $p['arch'][0] == 'noarch')	// arch
+					&& $p['firmware'] <= $build				// min firmware
 				) {
-					$p['desc'] = isset($p['desc_'.$this->language]) ? $p['desc_'.$this->language] : $p['desc'];
-					$p['dname'] = isset($p['dname_'.$this->language]) ? $p['dname_'.$this->language] : $p['dname'];
+					$p['desc'] = isset($p['desc_'.$l]) ? $p['desc_'.$l] : $p['desc'];
+					$p['dname'] = isset($p['dname_'.$l]) ? $p['dname_'.$l] : $p['dname'];
 					unset($p['arch'],$p['mtime'],$p['firmware']);
 					$response[] = $p;
 				}
@@ -180,11 +182,12 @@ Class PortableSPK implements IteratorAggregate
 			foreach($p['arch'] as $a) {
 				if(isset($parch[$p['package']][$a])) {
 					if(version_compare($parch[$p['package']][$a][1],$p['version'],'<')) {
-						$this->debugLog('discarding old version <span>'.$parch[$p['package']][$a][0].'</span> arch <b>'.$a.'</b>');
+						$this->debugLog('discarding old version <span>'.
+							$parch[$p['package']][$a][0].'</span> arch <b>'.$a.'</b>');
 						unset($in[$parch[$p['package']][$a][0]], $parch[$p['package']][$a]);
 						$parch[$p['package']][$a] = array($file,$p['version']);
 					}  else {
-						$this->debugLog('discarding old version <span>'.$file.'</span> arch <b>'.$a.'</b>');
+						$this->debugLog('old <span>'.$file.'</span> arch <b>'.$a.'</b>');
 					}
 				} else {
 					$parch[$p['package']][$a] = array($file,$p['version']);
@@ -205,13 +208,13 @@ Class PortableSPK implements IteratorAggregate
 			return false;
 		}
 		$i = 0;
-		$blocksize = 512;
-		while($h = unpack ('a100name/a8/a8/a8/a12size/a12/a8/a1/a100/a6/a2/a32/a32/a8/a8/a155/a12', fread($f,$blocksize)) ) {
+		$bs = 512;
+		while($h = unpack('a100name/a8/a8/a8/a12size/a12/a8/a1/a100/a6/a2/a32/a32/a8/a8',fread($f,$bs)) ) {
 			if(!$h || $h['name'] == '' || $i++ > 99) {
 				break;
 			}
 			$s = octdec($h['size']);
-			$pad = $s > 0 ? ($s-$s%$blocksize)+$blocksize : 0;
+			$pad = $s > 0 ? ($s-$s%$s)+$bs : 0;
 			$return['list'][$h['name']] = $s;
 			if($h['name'] == 'INFO') {
 				$return['INFO'] = substr(fread($f,$pad),0,$s);
@@ -230,7 +233,7 @@ Class PortableSPK implements IteratorAggregate
 			$this->debugLog('<span>'.$file.'</span> is no tar archive');
 			$return = $this->tarInfo($file,true);
 			if(isset($return['INFO'])) {
-				$this->debugLog('<span>'.$file.'</span> is a tar.gz archive, using transparent deflate');
+				$this->debugLog('<span>'.$file.'</span> is a tar.gz archive, using deflate');
 			}
 		}
 		return isset($return['INFO']) ? $return : false;
@@ -286,7 +289,8 @@ Class PortableSPK implements IteratorAggregate
 		foreach(explode("\n",$info) as $line) {
 			@list($field,$content) = explode('=',trim($line),2);
 			if($field == 'arch') {				// preserve arch for later filters
-				$json['arch'] = strpos($inner = strtolower(trim($content,"\r\n\t\"' ")),' ') === false ? array($inner) : explode(" ",$inner);
+				$json['arch'] = strpos($inner = strtolower(trim($content,"\r\n\t\"' ")),' ') === false ? 
+					array($inner) : explode(" ",$inner);
 				unset($mandatory[$field]);
 			} elseif($field == 'report_url'){		// report_url means beta
 				$json['beta'] = true;
@@ -296,14 +300,14 @@ Class PortableSPK implements IteratorAggregate
 			} elseif(preg_match('%^displayname_([a-z]{3})$%',$field,$m)) {	// dname_<lng> versions
 				$this->debugLog('  <b>'.$file.'</b> has language displayname <b>'.$m[1].'</b>');
 				$json['dname_'.$m[1]] = trim($content,"\r\n\t\"' ");
-			} elseif($field == 'firmware' && preg_match('%[0-9\.]+-([0-9]+)"%',$content,$m)) {	// only parse build number
+			} elseif($field == 'firmware' && preg_match('%[0-9\.]+-([0-9]+)"%',$content,$m)) {
 				$this->debugLog('  <b>'.$file.'</b> needs firmware <b>'.$m[1].'</b>');
-				$json['firmware'] = $m[1];
-			} elseif($field == 'startable'){				// startable yes/no -> (bool) start
+				$json['firmware'] = $m[1];		// build only
+			} elseif($field == 'startable'){		// startable yes/no -> (bool) start
 				$json['start'] = strtolower(trim($content)) == '"yes"';
 			} elseif($field == 'thirdparty'){
 				$json['thirdparty'] = strtolower(trim($content)) == '"yes"';
-			} elseif(isset($mandatory[$field])) {				// mandatory
+			} elseif(isset($mandatory[$field])) {		// mandatory
 				$json[$mandatory[$field]] = trim($content,"\r\n\t\"' ");
 				unset($mandatory[$field]);
 			} elseif(in_array($field,$mapped)) {				// mapped
@@ -313,12 +317,13 @@ Class PortableSPK implements IteratorAggregate
 			}
 		}
 		if(!isset($json['icon']) && isset($tarinfo['icon'])) {
-			$this->debugLog('  <b>'.$file.'</b> has no "package_icon", using content of PACKAGE_ICON.PNG</b>');
+			$this->debugLog('  no "package_icon=" in <b>'.$file.'</b> using PACKAGE_ICON.PNG</b>');
 			$json['icon'] = $tarinfo['icon'];
 			unset($mandatory['package_icon']);
 		}
 		if(count($mandatory) > 0) {
-			$this->debugLog('  <span>'.$file.'</span> missing mandatory: <b>'.implode(', ',array_keys($mandatory)).'</b>'."\nINFO:\n".$info."\n");
+			$this->debugLog('  <span>'.$file.'</span> missing mandatory: <b>'
+				.implode(', ',array_keys($mandatory)).'</b>'."\nINFO:\n".$info."\n");
 			return false;
 		}
 		$json['snapshots'] = $this->addSnapshot($path,$file,$json['package']);
@@ -349,7 +354,8 @@ Class PortableSPK implements IteratorAggregate
 		if($dh=opendir($path)) {
 			while (($file = readdir($dh)) !== false) {
 				if(preg_match('%^.*\.spk$%i',$file) 
-					&& (!isset($packages[$file]) || $packages[$file]['mtime'] != filemtime($path.$file) || $this->debug) 
+					&& (!isset($packages[$file]) 
+						|| $packages[$file]['mtime'] != filemtime($path.$file) || $this->debug) 
 					&& ($parsed = $this->addFile($file,$path))) {
 					$packages[$file] = $parsed;
 				}
