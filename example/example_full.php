@@ -339,12 +339,14 @@ Class PortableSPK implements IteratorAggregate
 	/* }}} */
 
 	/* {{{ function addSnapshot()	- search for /pkg_img/packageid_0.jpg [0..3]
+	 * @param	string	$path	relative spk folder offset
+	 * @param	string	$spkid	"package" ID
 	 * @return	array		snapshot paths / empty
 	 */
-	private function addSnapshot($path,$file,$spkid) {
+	private function addSnapshot($path,$spkid) {
 		for($i=0;$i<4 && file_exists($path.'pkg_img/'.($i2=($spkid.'_'.$i.'.jpg')));$i++) {
 			$return[] = $this->public_url.'pkg_img/'.$i2;
-			$this->debugLog(' <b>'.$file.'</b> has snapshot <b>'.$i2.'</b>');
+			$this->debugLog(' <b>'.$spkid.'</b> has snapshot <b>'.$i2.'</b>');
 		}
 		return $return;
 	}
