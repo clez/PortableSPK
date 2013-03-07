@@ -1,7 +1,7 @@
 PortableSPK
 ===========
 
-Script to generate a Synology SPK repository.
+Synology SPK repository PHP class
 
 See examples for a quick start.
 
