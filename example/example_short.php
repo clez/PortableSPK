@@ -29,11 +29,11 @@ if(isset($_REQUEST['arch'],$_REQUEST['build']) ) {
 echo '<html><head><title>'.htmlspecialchars($PortableSPK->public_name).'</title></head>';
 echo '<body><h1>'.htmlspecialchars($PortableSPK->public_name).'</h1>';
 foreach($PortableSPK as $file=>$package) {	// Package Iterator
+//	var_dump($package);
 	printf('<img style="float:left" src="data:image/png;base64,%s/>
 	<a href="%s">%s</a> %s<br/>%s<br/>%s<hr style="clear:both"/>',
 	$package['icon'], $package['link'],$package['dname'],$package['version'],
 	implode(' ',$package['arch']),$package['md5']);
-//	var_dump($package);
 }
 echo '</body></html>';
 
