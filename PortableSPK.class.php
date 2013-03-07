@@ -4,7 +4,7 @@
  *
  * $_REQUEST:
  * 	 bool      ?debug        see INFO parser details
- * 	 string    ?arch=        use ?arch=<arch> for a syno-like Response 
+ * 	 string    ?arch=        use ?arch=x86&build=99999 for a syno-like Response 
  * 	 string    ?language=    [chs|cht|enu|fre|ger|...] 
  * 	 int       ?build=       DSM build 
  *
