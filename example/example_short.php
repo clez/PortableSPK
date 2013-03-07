@@ -5,7 +5,8 @@
  * @category   PortableSPK
  * @package    example
  * @license    http://php.net/license/	PHP License
- * @see        http://spk.unzureichende.info/
+ * @link       http://spk.unzureichende.info/
+ * @see        https://github.com/clez/PortableSPK
  */
 // vim:fdm=marker:nowrap:ts=4 
 
@@ -35,4 +36,3 @@ foreach($PortableSPK as $file=>$package) {	// Package Iterator
 echo '</body></html>';
 
 // EOF
-
