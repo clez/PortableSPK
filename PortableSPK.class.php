@@ -1,13 +1,6 @@
 <?php
 /** 
- * Portable SPK Source - yet another synology package source script
- *
- * see below for example usage
- * setup:
- *	- create directory in webroot ( example: ./packages/ )
- *	- copy this script to ./packages/index.php (or any other name)
- *	- move/copy your SPK packages to ./packages/
- *	- (optional) setup SPK INFO cache (see example below)
+ * Portable SPK Source - synology package source class
  *
  * $_REQUEST:
  * 	 bool      ?debug        see INFO parser details
