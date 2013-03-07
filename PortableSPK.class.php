@@ -13,7 +13,8 @@
  * @author     <passeriform@gmail.com>
  * @license    http://php.net/license/	PHP License
  * @version    2013-03-06 / $Id$
- * @see        http://spk.unzureichende.info/
+ * @link       http://spk.unzureichende.info/
+ * @see        https://github.com/clez/PortableSPK
  * @since      2013-03-06
  *
  * vim:fdm=marker:nowrap:ts=4 
