@@ -427,7 +427,8 @@ if(isset($_REQUEST['arch'],$_REQUEST['build']) ) {
 
 /* {{{ function nice_size($return)
  * @param	int	$return	filesize in bytes
- * @return	string		firmatted silesize
+ * @param	bool	$ibi	1 KB = 1000 B || 1024 B, default=1024
+ * @return	string		formatted filesize
  */
 function nice_size($return,$ibi = false) {
 	$i = 0;
