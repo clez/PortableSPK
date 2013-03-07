@@ -6,14 +6,13 @@
  * @package    example
  * @license    http://php.net/license/	PHP License
  * @see        http://spk.unzureichende.info/
- *
- * vim:fdm=marker:nowrap:ts=4 
  */
+// vim:fdm=marker:nowrap:ts=4 
+
 require('../PortableSPK.class.php');
 $PortableSPK = new PortableSPK('./');
 //$PortableSPK->set('debug',false);
 //$PortableSPK->stack(new PortableSPK('./another/'));
-
 
 /**
  * synology getPackages request
@@ -27,11 +26,13 @@ if(isset($_REQUEST['arch'],$_REQUEST['build']) ) {
  */
 echo "<html><head><title>".htmlspecialchars($PortableSPK->public_name)."</title></head>";
 echo "<body><h1>".htmlspecialchars($PortableSPK->public_name)."</h1>";
-foreach($PortableSPK as $file=>$package) {
+foreach($PortableSPK as $file=>$package) {	// Package Iterator
 	echo "<img style=\"float:left\" src=\"data:image/png;base64,{$package['icon']}\"/>";
 	echo "<a href=\"{$package['link']}\">{$package['dname']}</a> {$package['version']}<br/>";
 	echo implode(' ',$package['arch']).'<br/>'.$package['md5'];
-	echo "<hr style=\"clear:both\"/>";
+	echo '<hr style="clear:both"/>';
 }
 echo '</body></html>';
+
+// EOF
 
