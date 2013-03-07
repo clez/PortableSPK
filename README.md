@@ -31,3 +31,4 @@ Environment:
 - No external executables
 - No package administration, drop in spk packages, SPK index monitors its folder's mtime
   and updates automatically
+- Some .spk packages in the same folder (default setup)
